@@ -155,7 +155,7 @@ if not os.path.exists('./output_imgs'):
 input_image = Image.open(filename)
 input_image.save('./output_imgs/original.png')
 
-to_save = fat_boi(input_image)
+to_save = long_boi(input_image)
 to_save.save('./output_imgs/1.png')
 
 # to_save = overlay(input_image)
