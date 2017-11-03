@@ -1,7 +1,56 @@
 import sys
 from PIL import Image
-import os
+import glob, os
 import shutil
+
+def upside_down(input_image):
+
+    output_image = input_image.rotate(180)
+    # output_image.show()
+    return output_image
+
+# --------------------------------------------
+
+def horizontal_flip(input_image):
+
+    output_image = input_image.transpose(Image.FLIP_LEFT_RIGHT)
+    # output_image.show()
+    return output_image
+
+# --------------------------------------------
+
+def get_dimensions(input_image):
+    width, height = input_image.size
+    return width, height
+
+def my_heart_will_go_on(imput_image, dim):
+
+    # input_image.show()
+    titanic = Image.open('./mhwgo.png')
+    width = dim[0]
+    height = dim[1]
+    size = width, height
+
+    # print size
+
+    new_titanic = titanic.resize(size, resample=1)
+    output_image = Image.blend(new_titanic, input_image, 0.3)
+
+    return output_image
+
+def overlay(input_image):
+
+    if not os.path.isfile('./mhwgo.png'):
+        print("no titanic img, quitting")
+        quit()
+
+    # input_image = Image.open(input_image)
+
+    dim = get_dimensions(input_image)
+
+    output_image = my_heart_will_go_on(input_image, dim)
+
+    return output_image
 
 # ------------------ main ------------------
 
@@ -13,11 +62,23 @@ if (filename == 'rm'):
         shutil.rmtree('./output_imgs')
     quit()
 
-my_image = Image.open(filename);
+# myImage.show()
 
 # create image output folder
 if not os.path.exists('./output_imgs'):
     os.mkdir('./output_imgs')
 
-my_image.save('./output_imgs/1.png', 'PNG')
-# myImage.show()
+input_image = Image.open(filename)
+input_image.save('./output_imgs/original.png')
+
+to_save = overlay(input_image)
+to_save.save('./output_imgs/1.png')
+
+to_save = upside_down(input_image)
+to_save.save('./output_imgs/2.png')
+
+to_save = horizontal_flip(input_image)
+to_save.save('./output_imgs/3.png')
+
+
+input_image.close()
